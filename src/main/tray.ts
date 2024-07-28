@@ -16,7 +16,7 @@ const createTray = (): void => {
     {
       label: '打开主界面',
       accelerator: 'Shift+A',
-      click: () => {
+      click: (): void => {
         myWindow.show()
       }
     },
@@ -25,8 +25,9 @@ const createTray = (): void => {
     {
       label: '截图',
       accelerator: 'ctrl+shift+A',
-      click: () => {
-        snapshot()
+      click: async (): Promise<void> => {
+        const imgUrl = await snapshot(myWindow)
+        myWindow.webContents.send('snapshot', imgUrl)
       }
     },
     { label: 'Item3', type: 'radio' }
@@ -36,6 +37,10 @@ const createTray = (): void => {
   tray.setContextMenu(contextMenu)
   // 注册全局快捷键
   globalShortcut.register('Shift+A', () => myWindow.show())
+  globalShortcut.register('ctrl+shift+A', async (): Promise<void> => {
+    const imgUrl = await snapshot(myWindow)
+    myWindow.webContents.send('snapshot', imgUrl)
+  })
 }
 
 app.on('will-quit', () => globalShortcut.unregisterAll())
