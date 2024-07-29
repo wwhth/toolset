@@ -1,42 +1,37 @@
-import { useCallback, useEffect, useState } from "react";
-import Screenshots, { Bounds } from "react-screenshots";
-import { ipcRenderer } from "electron";
-import "react-screenshots/lib/style.css";
+import { useCallback, useEffect, useState } from 'react'
+import Screenshots, { Bounds } from 'react-screenshots'
+import 'react-screenshots/lib/style.css'
 // import "./index.scss";
 
 export default function ShotScreen(): JSX.Element {
-  console.log("%c Line:8 🍧", "color:#93c0a4");
-  const [screenShotImg, setScreenShotImg] = useState("");
+  console.log('%c Line:8 🍧', 'color:#93c0a4')
+  const [screenShotImg, setScreenShotImg] = useState('')
 
   useEffect(() => {
-    getShotScreenImg();
-  }, []);
+    getShotScreenImg()
+  }, [])
 
-  async function getShotScreenImg() {
-    // window.api.snapshot((val) => {
-    // console.log('%c Line:9 🍐 val', 'color:#fca650', val)
-    // setScreenShotImg(val);
-    // return val
-    const img = await window.api.invoke("snapshot");
-    console.log("%c Line:21 🍔 img", "color:#33a5ff", img);
-    setScreenShotImg(img);
-    return img;
+  async function getShotScreenImg(): Promise<string> {
+    const img = await window.api.invoke('snapshot')
+    console.log('%c Line:21 🍔 img', 'color:#33a5ff', img)
+    setScreenShotImg(img)
+    return img
     // })
   }
 
   const onSave = useCallback((blob: Blob, bounds: Bounds) => {
-    const downloadUrl = URL.createObjectURL(blob);
+    const downloadUrl = URL.createObjectURL(blob)
     // ipcRenderer.send("ss:download-img", downloadUrl);
-  }, []);
+  }, [])
 
   const onCancel = useCallback(() => {
     // ipcRenderer.send("ss:close-win");
-  }, []);
+  }, [])
 
   const onOk = useCallback((blob: Blob, bounds: Bounds) => {
-    const downloadUrl = URL.createObjectURL(blob);
+    const downloadUrl = URL.createObjectURL(blob)
     // ipcRenderer.send("ss:save-img", downloadUrl);
-  }, []);
+  }, [])
 
   return (
     <Screenshots
@@ -47,5 +42,5 @@ export default function ShotScreen(): JSX.Element {
       onCancel={onCancel}
       onOk={onOk}
     />
-  );
+  )
 }

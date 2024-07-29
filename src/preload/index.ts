@@ -12,11 +12,12 @@ const api = {
 
   snapshot: (callback): IpcRenderer =>
     ipcRenderer.on('snapshot', (_event, value) => callback(value)),
-  invoke: (channel, data) => {
+  invoke: (channel): Promise<Electron.IpcRenderer> | void => {
     // whitelist channels
-    let validChannels = ['snapshot']
+    const validChannels = ['snapshot']
     if (validChannels.includes(channel)) {
-      return ipcRenderer.invoke(channel, data)
+      console.log('🚀 ~ channel:', channel)
+      return ipcRenderer.invoke(channel)
     }
   }
 }

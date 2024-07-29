@@ -51,7 +51,7 @@ const createTray = (): void => {
   })
 }
 
-function getSize() {
+function getSize(): { width: number; height: number } {
   const { size, scaleFactor } = screen.getPrimaryDisplay()
   return {
     width: size.width * scaleFactor,
@@ -59,7 +59,7 @@ function getSize() {
   }
 }
 
-function createCutWindow() {
+function createCutWindow(): void {
   const { width, height } = getSize()
   cutWindow = new BrowserWindow({
     width,
