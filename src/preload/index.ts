@@ -11,7 +11,14 @@ const api = {
   },
 
   snapshot: (callback): IpcRenderer =>
-    ipcRenderer.on('snapshot', (_event, value) => callback(value))
+    ipcRenderer.on('snapshot', (_event, value) => callback(value)),
+  invoke: (channel, data) => {
+    // whitelist channels
+    let validChannels = ['snapshot']
+    if (validChannels.includes(channel)) {
+      return ipcRenderer.invoke(channel, data)
+    }
+  }
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to
