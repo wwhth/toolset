@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import Screenshots, { Bounds } from 'react-screenshots'
 import 'react-screenshots/lib/style.css'
-// import "./index.scss";
+import './index.css'
 
 export default function ShotScreen(): JSX.Element {
   console.log('%c Line:8 🍧', 'color:#93c0a4')
@@ -35,7 +35,9 @@ export default function ShotScreen(): JSX.Element {
   }, [])
 
   return (
+    // <div className="shot-screen-container">
     <Screenshots
+      className="aaaa"
       url={screenShotImg}
       width={window.innerWidth}
       height={window.innerHeight}
@@ -43,5 +45,6 @@ export default function ShotScreen(): JSX.Element {
       onCancel={onCancel}
       onOk={onOk}
     />
+    // </div>
   )
 }
