@@ -1,5 +1,4 @@
 import path, { join } from 'path'
-// import { app } from 'electron'
 import { Menu, Tray, app, globalShortcut, BrowserWindow, screen, ipcMain } from 'electron'
 import { myWindow } from './index'
 import { snapshot } from './snapshot'
@@ -29,25 +28,23 @@ const createTray = (): void => {
       accelerator: 'ctrl+shift+A',
       click: async (): Promise<void> => {
         createCutWindow()
-        const imgUrl = await snapshot(cutWindow!)
-        ipcMain.handle('snapshot', async () => imgUrl)
+
         // cutWindow.webContents.send('snapshot', imgUrl)
       }
-    },
-    { label: 'Item3', type: 'radio' }
+    }
     // 分割
   ])
   tray.setToolTip('toolset')
   tray.setContextMenu(contextMenu)
   // 注册全局快捷键
   globalShortcut.register('Ctrl+A', () => myWindow.show())
-  globalShortcut.register('ctrl+shift+A', async (): Promise<void> => {
-    // const imgUrl = await snapshot(myWindow)
-    // myWindow.webContents.send('snapshot', imgUrl)
-    ipcMain.handle('snapshot', async () => {
-      return await snapshot(cutWindow!)
-    })
-  })
+  // globalShortcut.register('ctrl+shift+A', async (): Promise<void> => {
+  //   // const imgUrl = await snapshot(myWindow)
+  //   // myWindow.webContents.send('snapshot', imgUrl)
+  //   ipcMain.handle('snapshot', async () => {
+  //     return await snapshot(cutWindow!)
+  //   })
+  // })
 }
 
 function getSize(): { width: number; height: number } {
@@ -58,11 +55,20 @@ function getSize(): { width: number; height: number } {
   }
 }
 
-function createCutWindow(): void {
+async function createCutWindow(): Promise<void> {
   const { width, height } = getSize()
+  console.log('🚀 ~ createCutWindow ~ width, height:', width, height)
   cutWindow = new BrowserWindow({
     width,
     height,
+    // x: primaryDisplay.workArea.x,
+    // y: primaryDisplay.workArea.y,
+    // minWidth: 800,
+    // minHeight: 600,
+    // maxWidth: width,
+    // maxHeight: height,
+    // title: '截图工具',
+    // show: false,
     autoHideMenuBar: true,
     useContentSize: true,
     movable: false,
@@ -81,10 +87,10 @@ function createCutWindow(): void {
       sandbox: false
     }
   })
-
+  const imgUrl = await snapshot(cutWindow!)
+  ipcMain.handle('snapshot', async () => imgUrl)
   cutWindow.on('closed', () => {
     cutWindow = null
-    ipcMain.removeAllListeners('snapshot')
     ipcMain.removeHandler('snapshot')
   })
   if (NODE_ENV === 'development') {
@@ -94,7 +100,8 @@ function createCutWindow(): void {
       hash: 'cut'
     })
   }
-  // cutWindow.maximize()
+
+  cutWindow.maximize()
   cutWindow.setFullScreen(true)
 }
 app.on('will-quit', () => globalShortcut.unregisterAll())

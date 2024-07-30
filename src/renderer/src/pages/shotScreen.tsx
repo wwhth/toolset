@@ -16,12 +16,11 @@ export default function ShotScreen(): JSX.Element {
     console.log('%c Line:21 🍔 img', 'color:#33a5ff', img)
     setScreenShotImg(img)
     return img
-    // })
   }
 
   const onSave = useCallback((blob: Blob, bounds: Bounds) => {
     const downloadUrl = URL.createObjectURL(blob)
-    console.log("%c Line:24 🥑 downloadUrl", "color:#e41a6a", downloadUrl, bounds);
+    console.log('%c Line:24 🥑 downloadUrl', 'color:#e41a6a', downloadUrl, bounds)
     // ipcRenderer.send("ss:download-img", downloadUrl);
   }, [])
 
@@ -31,7 +30,7 @@ export default function ShotScreen(): JSX.Element {
 
   const onOk = useCallback((blob: Blob, bounds: Bounds) => {
     const downloadUrl = URL.createObjectURL(blob)
-    console.log("%c Line:34 🥕 downloadUrl", "color:#b03734", downloadUrl, bounds);
+    console.log('%c Line:34 🥕 downloadUrl', 'color:#b03734', downloadUrl, bounds)
     // ipcRenderer.send("ss:save-img", downloadUrl);
   }, [])
 
