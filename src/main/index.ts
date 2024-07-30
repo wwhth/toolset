@@ -72,11 +72,11 @@ app.whenReady().then(() => {
   // dock中隐藏
   app.dock.hide()
   // IPC test
-  ipcMain.on('ping', () => console.log('pong'))
-  ipcMain.handle('ipcHandle2', () => {
-    console.log('%c Line:77 🥑', 'color:#6ec1c2')
-    return 123
-  })
+  // ipcMain.on('ping', () => console.log('pong'))
+  // ipcMain.handle('ipcHandle2', () => {
+  //   console.log('%c Line:77 🥑', 'color:#6ec1c2')
+  //   return 123
+  // })
   createWindow()
   // 托盘
   createTray()

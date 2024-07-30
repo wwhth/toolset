@@ -3,7 +3,7 @@ import path, { join } from 'path'
 import { Menu, Tray, app, globalShortcut, BrowserWindow, screen, ipcMain } from 'electron'
 import { myWindow } from './index'
 import { snapshot } from './snapshot'
-let cutWindow: BrowserWindow
+let cutWindow: BrowserWindow | null = null
 const NODE_ENV = process.env.NODE_ENV
 const isMac = process.platform === 'darwin'
 const createTray = (): void => {
@@ -17,7 +17,7 @@ const createTray = (): void => {
     { label: '退出', role: 'quit' },
     {
       label: '打开主界面',
-      accelerator: 'Shift+A',
+      accelerator: 'Ctrl+A',
       click: (): void => {
         myWindow.show()
       }
@@ -29,8 +29,7 @@ const createTray = (): void => {
       accelerator: 'ctrl+shift+A',
       click: async (): Promise<void> => {
         createCutWindow()
-        const imgUrl = await snapshot(cutWindow)
-        console.log('%c Line:33 🍓 imgUrl', 'color:#ea7e5c', imgUrl)
+        const imgUrl = await snapshot(cutWindow!)
         ipcMain.handle('snapshot', async () => imgUrl)
         // cutWindow.webContents.send('snapshot', imgUrl)
       }
@@ -41,12 +40,12 @@ const createTray = (): void => {
   tray.setToolTip('toolset')
   tray.setContextMenu(contextMenu)
   // 注册全局快捷键
-  globalShortcut.register('Shift+A', () => myWindow.show())
+  globalShortcut.register('Ctrl+A', () => myWindow.show())
   globalShortcut.register('ctrl+shift+A', async (): Promise<void> => {
     // const imgUrl = await snapshot(myWindow)
     // myWindow.webContents.send('snapshot', imgUrl)
     ipcMain.handle('snapshot', async () => {
-      return await snapshot(cutWindow)
+      return await snapshot(cutWindow!)
     })
   })
 }
@@ -83,10 +82,15 @@ function createCutWindow(): void {
     }
   })
 
+  cutWindow.on('closed', () => {
+    cutWindow = null
+    ipcMain.removeAllListeners('snapshot')
+    ipcMain.removeHandler('snapshot')
+  })
   if (NODE_ENV === 'development') {
-    cutWindow.loadURL('http://localhost:5173/cut')
+    cutWindow.loadURL('http://localhost:5173/#/cut')
   } else {
-    cutWindow.loadFile(join(__dirname, '../../dist/index.html'), {
+    cutWindow.loadFile(join(__dirname, '../../out/renderer/index.html'), {
       hash: 'cut'
     })
   }
