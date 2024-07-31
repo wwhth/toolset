@@ -5,8 +5,10 @@ export async function snapshot(win: BrowserWindow): Promise<string> {
   const current_screen = getCurrentScreen(win) // 取得当前屏幕
 
   const mouse = screen.getCursorScreenPoint()
+  console.log('🚀 ~ snapshot ~ mouse:', mouse)
 
   const primaryDisplay = screen.getDisplayNearestPoint(mouse)
+  console.log('🚀 ~ snapshot ~ primaryDisplay:', primaryDisplay)
   // 这里的 primaryDisplay.size 由于缩放的原因可能与系统设置的分辨率不一样, 再乘上缩放比 scaleFactor
   const reality_width = primaryDisplay.size.width * primaryDisplay.scaleFactor
   const reality_height = primaryDisplay.size.height * primaryDisplay.scaleFactor
@@ -15,7 +17,7 @@ export async function snapshot(win: BrowserWindow): Promise<string> {
     current_screen,
     thumbSize
   )) as Electron.DesktopCapturerSource // 取得当前屏幕截屏数据
-
+  console.log(source, '=======')
   const imgUrl = source.thumbnail.toDataURL()
   return imgUrl
 }
@@ -38,12 +40,16 @@ async function getDesktopCapturer(
   thumbSize
 ): Promise<Electron.DesktopCapturerSource | void> {
   const screenName = current_screen['screen_index'] + 1
+  console.log('🚀 ~ current_screen:', current_screen)
+  console.log('🚀 ~ screenName:', screenName)
   const screen_names: string[] = []
   screen_names.push('屏幕 ' + screenName) // 中文为 `screen_names.push('屏幕 ' + screenName);`
-  screen_names.push('Entire Screen') // 中文为 `screen_names.push('整个屏幕');`
+  screen_names.push('整个屏幕') // 中文为 `screen_names.push('整个屏幕');`
 
+  console.log('🚀 ~ screen_names:', screen_names)
   // 以 thumbSize 屏幕分辨率取得所有屏幕截屏数据，如果 types 设置为 ['screen'， 'window'] 同时可以获取各个窗口的截屏数据
   const sources = await desktopCapturer.getSources({ types: ['screen'], thumbnailSize: thumbSize })
+  console.log('🚀 ~ sources:', sources)
 
   // 如果只有一个屏幕，则 name 为'整个屏幕'，如果有两个及以上屏幕，则 name 为 '屏幕 1' 和 '屏幕 2'
   if (sources) {
