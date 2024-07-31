@@ -2,11 +2,11 @@ import { useCallback, useEffect, useState } from 'react'
 import Screenshots, { Bounds } from 'react-screenshots'
 import 'react-screenshots/lib/style.css'
 import './index.css'
+import { ipcRenderer } from 'electron'
 
 export default function ShotScreen(): JSX.Element {
   console.log('%c Line:8 🍧', 'color:#93c0a4')
   const [screenShotImg, setScreenShotImg] = useState('')
-
   useEffect(() => {
     getShotScreenImg()
   }, [])
@@ -21,7 +21,6 @@ export default function ShotScreen(): JSX.Element {
   const onSave = useCallback((blob: Blob, bounds: Bounds) => {
     const downloadUrl = URL.createObjectURL(blob)
     console.log('%c Line:24 🥑 downloadUrl', 'color:#e41a6a', downloadUrl, bounds)
-    // ipcRenderer.send("ss:download-img", downloadUrl);
   }, [])
 
   const onCancel = useCallback(() => {
@@ -29,22 +28,22 @@ export default function ShotScreen(): JSX.Element {
   }, [])
 
   const onOk = useCallback((blob: Blob, bounds: Bounds) => {
-    const downloadUrl = URL.createObjectURL(blob)
-    console.log('%c Line:34 🥕 downloadUrl', 'color:#b03734', downloadUrl, bounds)
-    // ipcRenderer.send("ss:save-img", downloadUrl);
+    const imgUrl = URL.createObjectURL(blob)
+    console.log('%c Line:34 🥕 downloadUrl', 'color:#b03734', imgUrl, bounds, blob)
+    window.api.send("saveImgUrl", imgUrl);
   }, [])
 
   return (
-    // <div className="shot-screen-container">
-    <Screenshots
-      className="aaaa"
-      url={screenShotImg}
-      width={window.innerWidth}
-      height={window.innerHeight}
-      onSave={onSave}
-      onCancel={onCancel}
-      onOk={onOk}
-    />
-    // </div>
+    <div className="shot-screen-container">
+      <Screenshots
+        className="aaaa"
+        url={screenShotImg}
+        width={window.innerWidth}
+        height={window.innerHeight}
+        onSave={onSave}
+        onCancel={onCancel}
+        onOk={onOk}
+      />
+    </div>
   )
 }

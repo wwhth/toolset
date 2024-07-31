@@ -69,8 +69,10 @@ app.whenReady().then(() => {
   app.on('browser-window-created', (_, window) => {
     optimizer.watchWindowShortcuts(window)
   })
-  // dock中隐藏
-  app.dock.hide()
+  // mac中dock中隐藏
+  if (process.platform === 'darwin') {
+    app.dock.hide()
+  }
   // IPC test
   // ipcMain.on('ping', () => console.log('pong'))
   // ipcMain.handle('ipcHandle2', () => {

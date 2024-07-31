@@ -20,7 +20,6 @@ function App(): JSX.Element {
       {/* <CropDemo src={src}></CropDemo>
       <Versions></Versions> */}
       <HashRouter>
-
         <Routes>
           <Route path='/' element={<h1>home</h1>}></Route>
           <Route path='/cut' element={<ShotScreen></ShotScreen>}></Route>

@@ -81,7 +81,8 @@ async function createCutWindow(): Promise<void> {
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       nodeIntegration: true,
-      contextIsolation: false
+      contextIsolation: false,
+      webSecurity: false
     }
   })
   const imgUrl = await snapshot(cutWindow!)
@@ -105,8 +106,16 @@ ipcMain.on('close-win', () => {
   // cutWindow?.removeAllListeners('close')
   // cutWindow?.removeAllListeners('beforeunload')
   // cutWindow?.isDestroyed() || cutWindow?.close()
-  cutWindow?.destroy()
-  cutWindow = null
+  closeCutWindow()
+})
+ipcMain.on('saveImgUrl', (_event, imgUrl: string) => {
+  console.log('%c Line:113 🍿 imgUrl', 'color:#ea7e5c', imgUrl)
+  closeCutWindow()
 })
 app.on('will-quit', () => globalShortcut.unregisterAll())
+
+function closeCutWindow(): void {
+  cutWindow?.destroy()
+  cutWindow = null
+}
 export default createTray
