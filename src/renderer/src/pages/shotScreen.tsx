@@ -25,7 +25,7 @@ export default function ShotScreen(): JSX.Element {
   }, [])
 
   const onCancel = useCallback(() => {
-    // ipcRenderer.send("ss:close-win");
+    window.api.send('close-win')
   }, [])
 
   const onOk = useCallback((blob: Blob, bounds: Bounds) => {

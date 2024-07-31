@@ -1,6 +1,7 @@
 import { contextBridge, IpcRenderer, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
 
+const validChannels = ['snapshot', 'close-win']
 // Custom APIs for renderer
 const api = {
   test: (): void => {
@@ -14,10 +15,15 @@ const api = {
     ipcRenderer.on('snapshot', (_event, value) => callback(value)),
   invoke: async (channel): Promise<Electron.IpcRenderer | void> => {
     // whitelist channels
-    const validChannels = ['snapshot']
     if (validChannels.includes(channel)) {
       console.log('🚀 ~ channel:', channel)
       return await ipcRenderer.invoke(channel)
+    }
+  },
+  send: (channel): void => {
+    if (validChannels.includes(channel)) {
+      console.log('🚀 ~ channel:', channel)
+      return ipcRenderer.send(channel)
     }
   }
 }

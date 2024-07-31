@@ -28,8 +28,6 @@ const createTray = (): void => {
       accelerator: 'ctrl+shift+A',
       click: async (): Promise<void> => {
         createCutWindow()
-
-        // cutWindow.webContents.send('snapshot', imgUrl)
       }
     }
     // 分割
@@ -38,13 +36,9 @@ const createTray = (): void => {
   tray.setContextMenu(contextMenu)
   // 注册全局快捷键
   globalShortcut.register('Ctrl+A', () => myWindow.show())
-  // globalShortcut.register('ctrl+shift+A', async (): Promise<void> => {
-  //   // const imgUrl = await snapshot(myWindow)
-  //   // myWindow.webContents.send('snapshot', imgUrl)
-  //   ipcMain.handle('snapshot', async () => {
-  //     return await snapshot(cutWindow!)
-  //   })
-  // })
+  globalShortcut.register('ctrl+shift+A', async (): Promise<void> => {
+    createCutWindow()
+  })
 }
 
 function getSize(): { width: number; height: number } {
@@ -57,12 +51,16 @@ function getSize(): { width: number; height: number } {
 
 async function createCutWindow(): Promise<void> {
   const { width, height } = getSize()
-  console.log('🚀 ~ createCutWindow ~ width, height:', width, height)
+  // 获取所有显示屏
+  const mouse = screen.getCursorScreenPoint()
+
+  const primaryDisplay = screen.getDisplayNearestPoint(mouse)
+
   cutWindow = new BrowserWindow({
     width,
     height,
-    // x: primaryDisplay.workArea.x,
-    // y: primaryDisplay.workArea.y,
+    x: primaryDisplay.bounds.x,
+    y: primaryDisplay.bounds.y,
     // minWidth: 800,
     // minHeight: 600,
     // maxWidth: width,
@@ -83,8 +81,7 @@ async function createCutWindow(): Promise<void> {
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       nodeIntegration: true,
-      contextIsolation: false,
-      sandbox: false
+      contextIsolation: false
     }
   })
   const imgUrl = await snapshot(cutWindow!)
@@ -96,13 +93,20 @@ async function createCutWindow(): Promise<void> {
   if (NODE_ENV === 'development') {
     cutWindow.loadURL('http://localhost:5173/#/cut')
   } else {
-    cutWindow.loadFile(join(__dirname, '../../out/renderer/index.html'), {
+    cutWindow.loadFile(join(__dirname, '../renderer/index.html'), {
       hash: 'cut'
     })
   }
-
   cutWindow.maximize()
   cutWindow.setFullScreen(true)
 }
+
+ipcMain.on('close-win', () => {
+  // cutWindow?.removeAllListeners('close')
+  // cutWindow?.removeAllListeners('beforeunload')
+  // cutWindow?.isDestroyed() || cutWindow?.close()
+  cutWindow?.destroy()
+  cutWindow = null
+})
 app.on('will-quit', () => globalShortcut.unregisterAll())
 export default createTray
