@@ -16,7 +16,7 @@ interface imageData {
   height: number
 }
 const store = new Store()
-let imgUrlList: imageData[] = []
+const imgUrlList: imageData[] = []
 let cutWindow: BrowserWindow | null = null
 let chartletWindow: BrowserWindow | null = null
 const NODE_ENV = process.env.NODE_ENV
@@ -196,7 +196,7 @@ ipcMain.on('close-win', () => {
 ipcMain.on('saveImgUrl', (_event, data: [string, { width: number; height: number }]) => {
   console.log('%c Line:113 🍿 imgUrl', 'color:#ea7e5c', data)
   // store.delete('imgUrlList')
-  let options = {
+  const options = {
     url: data[0],
     width: data[1].width,
     height: data[1].height

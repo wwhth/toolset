@@ -1,4 +1,5 @@
-import { memo, useCallback, useEffect, useState } from 'react'
+/* eslint-disable react/display-name */
+import { memo, useEffect, useState } from 'react'
 import type { FC, ReactNode } from 'react'
 import './index.css'
 interface IProps {
@@ -18,9 +19,11 @@ const Chartlet: FC<IProps> = memo(() => {
     return img
   }
 
-
-  return (<div className='chartlet'>
-    <img src={img} alt="" /></div>)
+  return (
+    <div className="chartlet">
+      <img src={img} alt="" />
+    </div>
+  )
 })
 
 export default Chartlet

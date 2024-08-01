@@ -43,8 +43,8 @@ async function getDesktopCapturer(
   console.log('🚀 ~ current_screen:', current_screen)
   console.log('🚀 ~ screenName:', screenName)
   const screen_names: string[] = []
-  screen_names.push('屏幕 ' + screenName) // 中文为 `screen_names.push('屏幕 ' + screenName);`
-  screen_names.push('整个屏幕') // 中文为 `screen_names.push('整个屏幕');`
+  screen_names.push('屏幕 ' + screenName) // 中文为 `screen_names.push('屏幕 ' + screenName);` 英文 screen_names.push('Screen ' + screenName)
+  screen_names.push('整个屏幕') // 中文为 `screen_names.push('整个屏幕');` 英文 screen_names.push('Entire Screen')
 
   console.log('🚀 ~ screen_names:', screen_names)
   // 以 thumbSize 屏幕分辨率取得所有屏幕截屏数据，如果 types 设置为 ['screen'， 'window'] 同时可以获取各个窗口的截屏数据

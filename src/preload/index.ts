@@ -20,7 +20,7 @@ const api = {
       return await ipcRenderer.invoke(channel)
     }
   },
-  send: (channel, ...argus: any[]): void => {
+  send: (channel, ...argus): void => {
     if (validChannels.includes(channel)) {
       console.log('🚀 ~ channel:', channel, argus)
       return ipcRenderer.send(channel, argus)
