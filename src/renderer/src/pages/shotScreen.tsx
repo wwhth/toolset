@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import Screenshots, { Bounds } from 'react-screenshots'
-import 'react-screenshots/lib/style.css'
 import './index.css'
+import 'react-screenshots/lib/style.css'
 
 export default function ShotScreen(): JSX.Element {
   console.log('%c Line:8 🍧', 'color:#93c0a4')
@@ -29,7 +29,7 @@ export default function ShotScreen(): JSX.Element {
   const onOk = useCallback((blob: Blob, bounds: Bounds) => {
     const imgUrl = URL.createObjectURL(blob)
     console.log('%c Line:34 🥕 downloadUrl', 'color:#b03734', imgUrl, bounds, blob)
-    window.api.send('saveImgUrl', imgUrl)
+    window.api.send('saveImgUrl', imgUrl, bounds)
   }, [])
 
   return (

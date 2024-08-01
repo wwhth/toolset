@@ -1,4 +1,4 @@
-// import './assets/main.css'
+import './assets/main.css'
 import 'react-image-crop/dist/ReactCrop.css'
 // import React from 'react'
 import ReactDOM from 'react-dom/client'

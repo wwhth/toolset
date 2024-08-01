@@ -23,6 +23,7 @@
   "dependencies": {
     "@electron-toolkit/preload": "^3.0.1",
     "@electron-toolkit/utils": "^3.0.0",
+    "electron-store": "^8.2.0",
     "electron-updater": "^6.1.7",
     "react-image-crop": "^11.0.6",
     "react-redux": "^9.1.2",

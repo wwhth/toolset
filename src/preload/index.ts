@@ -1,7 +1,7 @@
 import { contextBridge, IpcRenderer, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
 
-const validChannels = ['snapshot', 'close-win', 'saveImgUrl']
+const validChannels = ['snapshot', 'close-win', 'saveImgUrl', 'getChartletUrl']
 // Custom APIs for renderer
 const api = {
   test: (): void => {
@@ -20,10 +20,10 @@ const api = {
       return await ipcRenderer.invoke(channel)
     }
   },
-  send: (channel, data): void => {
+  send: (channel, ...argus: any[]): void => {
     if (validChannels.includes(channel)) {
-      console.log('🚀 ~ channel:', channel)
-      return ipcRenderer.send(channel, data)
+      console.log('🚀 ~ channel:', channel, argus)
+      return ipcRenderer.send(channel, argus)
     }
   }
 }
