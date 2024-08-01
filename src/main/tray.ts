@@ -154,16 +154,18 @@ async function createChartletWindow(): Promise<void> {
     // minHeight: 600,
     maxWidth: 800,
     maxHeight: 600,
+    x: 100,
+    y: 100,
     // title: '截图工具',
     // show: false,
     autoHideMenuBar: true,
-    useContentSize: true,
-    movable: false,
+    // useContentSize: true,
+    movable: true,
     frame: false,
     resizable: true,
     hasShadow: false,
     transparent: true,
-    alwaysOnTop: false,
+    alwaysOnTop: true,
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       nodeIntegration: true,
@@ -220,6 +222,13 @@ app.on('will-quit', () => {
   if (store.get('imgUrlList')) {
     store.delete('imgUrlList')
   }
+  chartletWindow?.destroy()
+  cutWindow?.destroy()
+  chartletWindow = null
+  cutWindow = null
+})
+app.on('before-quit', () => {
+  console.log('%c Line:232 🎂', 'color:#f5ce50')
   chartletWindow?.destroy()
   cutWindow?.destroy()
   chartletWindow = null

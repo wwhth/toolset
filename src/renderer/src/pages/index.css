@@ -6,17 +6,22 @@ body {
   background-color: #f0f0f0;
 }
 
-/* 页面容器 */
+/* 页面容器
 .container {
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
   background-color: #fff;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
+} */
 
 .chartlet {
   width: 100%;
   height: 100%;
   -webkit-app-region: true;
+  -webkit-scroller-overflow: hidden;
+}
+/* 隐藏滚动条 */
+::-webkit-scrollbar {
+  display: none;
 }
