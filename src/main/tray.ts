@@ -16,6 +16,7 @@ interface imageData {
   height: number
 }
 const store = new Store()
+let offset: number = 0
 const imgUrlList: imageData[] = []
 let cutWindow: BrowserWindow | null = null
 let chartletWindow: BrowserWindow | null = null
@@ -54,11 +55,6 @@ const createTray = (): void => {
       label: '贴图',
       accelerator: 'ctrl+S',
       click: (): void => {
-        console.log(
-          "%c Line:54 🌽 store.get('imgUrlList')",
-          'color:#ed9ec7',
-          store.get('imgUrlList')
-        )
         if ((store.get('imgUrlList') as imageData[]).length > 0) {
           createChartletWindow()
         }
@@ -71,10 +67,13 @@ const createTray = (): void => {
   // 注册全局快捷键
   globalShortcut.register('Ctrl+A', () => myWindow.show())
   globalShortcut.register('ctrl+shift+A', async (): Promise<void> => {
+    if (cutWindow != null) {
+      cutWindow?.destroy()
+      cutWindow = null
+    }
     createCutWindow()
   })
   globalShortcut.register('ctrl+S', async (): Promise<void> => {
-    console.log("%c Line:78 🎂 store.get('imgUrlList')", 'color:#e41a6a', store.get('imgUrlList'))
     if ((store.get('imgUrlList') as imageData[])?.length > 0) {
       createChartletWindow()
     }
@@ -95,6 +94,7 @@ async function createCutWindow(): Promise<void> {
   const mouse = screen.getCursorScreenPoint()
 
   const primaryDisplay = screen.getDisplayNearestPoint(mouse)
+  console.log('primaryDisplay: ---------------------', primaryDisplay)
 
   cutWindow = new BrowserWindow({
     width,
@@ -127,10 +127,9 @@ async function createCutWindow(): Promise<void> {
   })
   const imgUrl = await snapshot(cutWindow!)
   ipcMain.handle('snapshot', async () => imgUrl)
-  // cutWindow.on('closed', () => {
-  //   cutWindow = null
-  //   ipcMain.removeHandler('snapshot')
-  // })
+  cutWindow.on('closed', () => {
+    ipcMain.removeHandler('snapshot')
+  })
   cutWindow.on('hide', () => {
     ipcMain.removeHandler('snapshot')
   })
@@ -147,6 +146,9 @@ async function createCutWindow(): Promise<void> {
 
 async function createChartletWindow(): Promise<void> {
   ipcMain.removeHandler('getChartletUrl')
+  if (chartletWindow != null) {
+    offset += 10
+  }
   chartletWindow = new BrowserWindow({
     width: (store.get('imgUrlList') as imageData[])[0].width as number,
     height: (store.get('imgUrlList') as imageData[])[0].height as number,
@@ -154,8 +156,8 @@ async function createChartletWindow(): Promise<void> {
     // minHeight: 600,
     maxWidth: 800,
     maxHeight: 600,
-    x: 100,
-    y: 100,
+    x: 100 + offset,
+    y: 100 + offset,
     // title: '截图工具',
     // show: false,
     autoHideMenuBar: true,
