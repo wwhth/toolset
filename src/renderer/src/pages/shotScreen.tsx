@@ -28,6 +28,7 @@ export default function ShotScreen(): JSX.Element {
 
   const onOk = useCallback((blob: Blob, bounds: Bounds) => {
     const imgUrl = URL.createObjectURL(blob)
+    window.api.cv(imgUrl)
     console.log('%c Line:34 🥕 downloadUrl', 'color:#b03734', imgUrl, bounds, blob)
     window.api.send('saveImgUrl', imgUrl, bounds)
   }, [])
