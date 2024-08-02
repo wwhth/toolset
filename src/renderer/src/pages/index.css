@@ -3,7 +3,7 @@ body {
   margin: 0;
   padding: 0;
   font-family: Arial, sans-serif;
-  background-color: #f0f0f0;
+  background-color: transparent;
 }
 
 /* 页面容器
@@ -16,10 +16,45 @@ body {
 } */
 
 .chartlet {
+  position: relative;
   width: 100%;
   height: 100%;
-  -webkit-app-region: true;
   -webkit-scroller-overflow: hidden;
+  /* 好看的box-shadow */
+
+  border-radius: 10px;
+  background-color: transparent;
+  overflow: hidden;
+  margin: 0 auto;
+  padding: 20px;
+  box-sizing: border-box;
+  /* box-sizing: border-box; */
+}
+.close {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 5px;
+  left: 5px;
+  top: 5px;
+  display: none;
+}
+/* .close:hover {
+  cursor: pointer;
+  visibility: inherit;
+} */
+.chartlet img {
+  /* 占满全部，等比方法 */
+  width: 100%;
+  height: 100%;
+  -webkit-app-region: drag;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+  /* border: 4px solid rgb(128, 0, 38); */
+}
+.chartlet:hover .close {
+  cursor: pointer;
+  display: block;
 }
 /* 隐藏滚动条 */
 ::-webkit-scrollbar {

@@ -18,9 +18,16 @@ const Chartlet: FC<IProps> = memo(() => {
     setImg(img)
     return img
   }
+  async function closeChartlet(): Promise<void> {
+    console.log('关闭')
+    await window.api.send('closeChartlet')
+  }
 
   return (
     <div className="chartlet">
+      <div className="close">
+        <button onClick={closeChartlet}>x</button>
+      </div>
       <img src={img} alt="" />
     </div>
   )

@@ -150,8 +150,8 @@ async function createChartletWindow(): Promise<void> {
     offset += 10
   }
   chartletWindow = new BrowserWindow({
-    width: (store.get('imgUrlList') as imageData[])[0].width as number,
-    height: (store.get('imgUrlList') as imageData[])[0].height as number,
+    width: ((store.get('imgUrlList') as imageData[])[0].width as number) + 20,
+    height: ((store.get('imgUrlList') as imageData[])[0].height as number) + 20,
     // minWidth: 800,
     // minHeight: 600,
     maxWidth: 800,
@@ -164,7 +164,7 @@ async function createChartletWindow(): Promise<void> {
     // useContentSize: true,
     movable: true,
     frame: false,
-    resizable: true,
+    resizable: false,
     hasShadow: false,
     transparent: true,
     alwaysOnTop: true,
@@ -207,6 +207,11 @@ ipcMain.on('saveImgUrl', (_event, data: [string, { width: number; height: number
   store.set('imgUrlList', imgUrlList)
   console.log('%c Line:131 🥖 store', 'color:#4fff4B', store.get('imgUrlList'))
   closeCutWindow()
+})
+ipcMain.on('closeChartlet', () => {
+  let currentWin = BrowserWindow.getFocusedWindow()
+  currentWin?.destroy()
+  currentWin = null
 })
 app.on('will-quit', () => globalShortcut.unregisterAll())
 app.on('quit', () => {

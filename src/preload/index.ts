@@ -1,7 +1,7 @@
 import { contextBridge, IpcRenderer, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
 
-const validChannels = ['snapshot', 'close-win', 'saveImgUrl', 'getChartletUrl']
+const validChannels = ['snapshot', 'close-win', 'saveImgUrl', 'getChartletUrl', 'closeChartlet']
 // Custom APIs for renderer
 const api = {
   test: (): void => {
