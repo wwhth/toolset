@@ -140,7 +140,7 @@ async function createCutWindow(): Promise<void> {
       hash: 'cut'
     })
   }
-  cutWindow.maximize()
+  // cutWindow.maximize()   //全屏了用这个有些显示屏会显示不全，导致跑到别的屏幕
   cutWindow.setFullScreen(true)
 }
 
