@@ -59,13 +59,19 @@ async function getDesktopCapturer(
   // 如果只有一个屏幕，则 name 为'整个屏幕'，如果有两个及以上屏幕，则 name 为 '屏幕 1' 和 '屏幕 2'
   if (sources) {
     for (const source of sources) {
-      // if (screen_names.indexOf(source.name) != -1) {
-      //   // 通过 name 确定屏幕  mac接入ipad作为镜像顺序会跟上面不一致
-      //   return source
-      // }
-      if (current_screen['currentDisplayId'] == source.display_id) {
-        // display_id 确定屏幕更好一些
-        return source
+      // macOS 系统下，如果屏幕分辨率不同，则 name 为 '屏幕 1' 和 '屏幕 2'，所以不能通过 name 确定屏幕
+      if (process.platform === 'darwin') {
+        if (current_screen['currentDisplayId'] == source.display_id) {
+          // display_id 确定屏幕更好一些
+          return source
+        }
+      } else if (process.platform === 'win32') {
+        if (screen_names.indexOf(source.name) != -1) {
+          // 通过 name 确定屏幕  mac接入ipad作为镜像顺序会跟上面不一致
+          return source
+        }
+      } else {
+        alert('请使用macOS或Windows系统')
       }
     }
   }

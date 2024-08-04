@@ -55,7 +55,7 @@ const createTray = (): void => {
       label: '贴图',
       accelerator: 'ctrl+S',
       click: (): void => {
-        if ((store.get('imgUrlList') as imageData[]).length > 0) {
+        if ((store.get('imgUrlList') as imageData[])?.length > 0) {
           createChartletWindow()
         }
       }
