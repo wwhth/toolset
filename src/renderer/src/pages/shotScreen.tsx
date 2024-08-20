@@ -4,7 +4,6 @@ import './index.css'
 import 'react-screenshots/lib/style.css'
 
 export default function ShotScreen(): JSX.Element {
-  console.log('%c Line:8 🍧', 'color:#93c0a4')
   const [screenShotImg, setScreenShotImg] = useState('')
   useEffect(() => {
     getShotScreenImg()
@@ -12,7 +11,6 @@ export default function ShotScreen(): JSX.Element {
 
   async function getShotScreenImg(): Promise<string> {
     const img = await window.api.invoke('snapshot')
-    console.log('%c Line:21 🍔 img', 'color:#33a5ff', img)
     setScreenShotImg(img)
     return img
   }
@@ -29,7 +27,6 @@ export default function ShotScreen(): JSX.Element {
   const onOk = useCallback((blob: Blob, bounds: Bounds) => {
     const imgUrl = URL.createObjectURL(blob)
     window.api.cv(imgUrl)
-    console.log('%c Line:34 🥕 downloadUrl', 'color:#b03734', imgUrl, bounds, blob)
     window.api.send('saveImgUrl', imgUrl, bounds)
   }, [])
 

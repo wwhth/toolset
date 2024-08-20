@@ -32,7 +32,6 @@ function getCurrentScreen(win: BrowserWindow): { screen_index: number; currentDi
 
   const allDisplays = screen.getAllDisplays()
   console.log('allDisplays: ', allDisplays)
-
   const currentDisplayIndex = allDisplays.findIndex((display) => {
     return display.id === currentDisplay.id
   })

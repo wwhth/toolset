@@ -1,6 +1,6 @@
 import path, { join } from 'path'
 import { Menu, Tray, app, globalShortcut, BrowserWindow, screen, ipcMain } from 'electron'
-import { myWindow } from './index'
+// import { myWindow } from './index'
 import { snapshot } from './snapshot'
 import Store from 'electron-store'
 // 数组怎么用store保存
@@ -31,13 +31,13 @@ const createTray = (): void => {
   )
   const contextMenu = Menu.buildFromTemplate([
     { label: '退出', role: 'quit' },
-    {
-      label: '打开主界面',
-      accelerator: 'Ctrl+A',
-      click: (): void => {
-        myWindow.show()
-      }
-    },
+    // {
+    //   label: '打开主界面',
+    //   accelerator: 'Ctrl+A',
+    //   click: (): void => {
+    //     myWindow.show()
+    //   }
+    // },
     { type: 'separator' },
     // 配置快捷键shift+A
     {
@@ -53,7 +53,7 @@ const createTray = (): void => {
     },
     {
       label: '贴图',
-      accelerator: 'ctrl+S',
+      accelerator: 'ctrl+shift+S',
       click: (): void => {
         if ((store.get('imgUrlList') as imageData[])?.length > 0) {
           createChartletWindow()
@@ -65,7 +65,7 @@ const createTray = (): void => {
   tray.setToolTip('toolset')
   tray.setContextMenu(contextMenu)
   // 注册全局快捷键
-  globalShortcut.register('Ctrl+A', () => myWindow.show())
+  // globalShortcut.register('Ctrl+A', () => myWindow.show())
   globalShortcut.register('ctrl+shift+A', async (): Promise<void> => {
     if (cutWindow != null) {
       cutWindow?.destroy()
@@ -73,7 +73,7 @@ const createTray = (): void => {
     }
     createCutWindow()
   })
-  globalShortcut.register('ctrl+S', async (): Promise<void> => {
+  globalShortcut.register('ctrl+shift+S', async (): Promise<void> => {
     if ((store.get('imgUrlList') as imageData[])?.length > 0) {
       createChartletWindow()
     }
@@ -143,12 +143,23 @@ async function createCutWindow(): Promise<void> {
   // cutWindow.maximize()   //全屏了用这个有些显示屏会显示不全，导致跑到别的屏幕
   cutWindow.setFullScreen(true)
 }
-
+// let currentDisplay: Electron.Display | null = null
 async function createChartletWindow(): Promise<void> {
-  ipcMain.removeHandler('getChartletUrl')
+  const mouse = screen.getCursorScreenPoint()
+  const primaryDisplay = screen.getDisplayNearestPoint(mouse)
   if (chartletWindow != null) {
     offset += 10
   }
+  // else if (currentDisplay) {
+  //   console.log('%c Line:153 🍫 currentDisplay', 'color:#3f7cff', currentDisplay)
+  //   if (primaryDisplay.id === (currentDisplay as Electron.Display).id) {
+  //     offset = 0
+  //   }
+  // }
+  // currentDisplay = primaryDisplay
+  console.log('%c Line:152 🌰 primaryDisplay', 'color:#fca650', primaryDisplay)
+  ipcMain.removeHandler('getChartletUrl')
+
   chartletWindow = new BrowserWindow({
     width: ((store.get('imgUrlList') as imageData[])[0].width as number) + 20,
     height: ((store.get('imgUrlList') as imageData[])[0].height as number) + 20,
@@ -156,8 +167,10 @@ async function createChartletWindow(): Promise<void> {
     // minHeight: 600,
     maxWidth: 800,
     maxHeight: 600,
-    x: 100 + offset,
-    y: 100 + offset,
+    // x: 100 + offset,
+    // y: 100 + offset,
+    x: primaryDisplay.bounds.x + 100 + offset,
+    y: primaryDisplay.bounds.y + 100 + offset,
     // title: '截图工具',
     // show: false,
     autoHideMenuBar: true,
